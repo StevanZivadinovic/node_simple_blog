@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
-const blogRouter = require('./../routes/blogsRoutes.js')
+const blogRouterAppMain = require('./../routes/blogsRoutes.js')
 app.listen(3000);
 
 //register new engine
@@ -49,7 +49,7 @@ app.use((req: { db: any; }, res: any, next: () => void) => {
   req.db = db;
   next();
 });
-app.use(blogRouter)
+app.use(blogRouterAppMain)
 app.use((req: any, res: { status: (arg0: number) => { (): any; new(): any; render: { (arg0: string, arg1: { title: string; }): void; new(): any; }; }; }) => {
   res.status(404).render("404", { title: "Page not exist!" });
 });
