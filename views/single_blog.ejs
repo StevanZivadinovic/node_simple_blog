@@ -1,0 +1,19 @@
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  <body>
+    <%- include("./partials/nav.ejs") %>
+    <H2><%= title %></H2>
+
+    <% if (blog) { %>
+    <div  id="<%= blog.id %>" ">
+      <div class="sectionOne">
+        <h3 class="title"><%= blog[0]?.title %></h3>
+        <p class="snippet"><%= blog[0]?.snippet %></p>
+        <p class="body"><%= blog[0]?.blog_body %></p>
+      </div>
+    </div>
+     <% } else { %>
+    <p>There are no blogs to display...</p>
+    <% } %> <%- include("./partials/footer.ejs") %>
+  </body>
+</html>

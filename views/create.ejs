@@ -1,0 +1,62 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="create-blog content">
+    <form id="addBlog">
+      <label for="title">Blog title:</label>
+      <input type="text" id="title" name="title" required>
+      <label for="snippet">Blog snippet:</label>
+      <input type="text" id="snippet" name="snippet" required>
+      <label for="body">Blog body:</label>
+      <textarea id="body" name="body" required></textarea>
+      <button>Submit</button>
+    </form>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+  <script>
+    const form = document.getElementById('addBlog');
+    const title = document.getElementById('title');
+    const snippet = document.getElementById('snippet');
+    const blog_body = document.getElementById('body');
+      form.addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      // Get form data
+      const formData = {
+        title: title.value,
+        snippet: snippet.value,
+        blog_body: blog_body.value
+      };
+      console.log(formData)
+      // Send AJAX request to the server
+      fetch('/signup_zahtev', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        console.log(response)
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        title.value='';
+        snippet.value='';
+        blog_body.value=''
+        return response.json();
+      })
+      .then(data => {
+        console.log('Blog created:', data)
+      })
+      .catch(error => {
+        console.error('Error creating blog:', error);
+      });
+    });
+  </script>
+</body>
+</html>
