@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const app = express();
-const blogRouter = require('./routes/blogsRoutes.js')
+const blogRouter = require('./../routes/blogsRoutes.js')
 app.listen(3000);
 
 //register new engine
@@ -14,7 +14,7 @@ app.use(express.json());
 //     console.log('every time this middleware renders');
 //     next()//ako ne stavis next() ne cita kod dalje, blokira refresh
 // })
-const generateSessionId = require("./functions/generateIDForLogedUsers.js");
+const generateSessionId = require("./../functions/generateIDForLogedUsers.js");
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -22,13 +22,13 @@ const db = mysql.createConnection({
   database: "blogs",
 });
 
-app.post("/signup_zahtev", (req, res) => {
+app.post("/signup_zahtev", (req: { body: { title: any; snippet: any; blog_body: any; }; }, res: { send: (arg0: string) => void; }) => {
   const sql =
     "INSERT INTO blogovi (`id`,`title`, `snippet`, `blog_body`) VALUES (?)";
   const ID = generateSessionId();
   const values = [ID, req.body.title, req.body.snippet, req.body.blog_body];
 
-  db.query(sql, [values], (err, data) => {
+  db.query(sql, [values], (err: any, data: string) => {
     if (err) {
       console.log(err);
       return res.send("Error");
@@ -37,20 +37,20 @@ app.post("/signup_zahtev", (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
+app.get("/", (req: any, res: { redirect: (arg0: string) => void; }) => {
   res.redirect("/blogs");
 });
-app.get("/about", (req, res) => {
+app.get("/about", (req: any, res: { render: (arg0: string, arg1: { title: string; }) => void; }) => {
   res.render("about", { title: "About" });
 });
 
 //middlewares
-app.use((req, res, next) => {
+app.use((req: { db: any; }, res: any, next: () => void) => {
   req.db = db;
   next();
 });
 app.use(blogRouter)
-app.use((req, res) => {
+app.use((req: any, res: { status: (arg0: number) => { (): any; new(): any; render: { (arg0: string, arg1: { title: string; }): void; new(): any; }; }; }) => {
   res.status(404).render("404", { title: "Page not exist!" });
 });
 module.exports = app;
